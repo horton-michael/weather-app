@@ -38,6 +38,7 @@ function getForecast(lat, lon) {
     lat +
     "&lon=" +
     lon +
+    "&units=imperial" +
     "&appid=" +
     apiKey;
   fetch(forecastUrl)
@@ -51,10 +52,12 @@ function getForecast(lat, lon) {
       console.log(error);
     });
 }
-function setForecast() {
+function setForecast(event) {
+  event.preventDefault();
+  var city = cityInput.val();
   getCoordinates(city);
 }
 // USER INTERACTIONS ==================================================
 
 // INITIALIZATION =====================================================
-setForecast();
+cityForm.on("submit", setForecast);
