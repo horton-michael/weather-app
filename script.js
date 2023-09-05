@@ -1,6 +1,7 @@
 // Weather Dashboard
 
 // DEPENDENCIES =======================================================
+var cityInput = $("#city-input");
 
 // DATA ===============================================================
 var city = "Denver";
