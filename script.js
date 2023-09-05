@@ -2,7 +2,7 @@
 
 // DEPENDENCIES =======================================================
 var cityInput = $("#city-input");
-
+var cityForm = $("#city-form");
 // DATA ===============================================================
 var city = "Denver";
 var apiKey = "791b83e9b2800aa5dfea0d02e03f6cb9";
