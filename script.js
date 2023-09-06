@@ -10,6 +10,7 @@ var currentTemperatureEl = $("#temperature");
 var currentHumidityEl = $("#humidity");
 var currentWindSpeedEl = $("#wind-speed");
 var forecastContainerEl = $("#forecast-container");
+var currentWeatherCard = $("#current-weather-card");
 // DATA ===============================================================
 var city = "Denver";
 var apiKey = "791b83e9b2800aa5dfea0d02e03f6cb9";
@@ -152,6 +153,7 @@ function createForecastCard(dayData) {
 
 function setForecast(event) {
   event.preventDefault();
+  currentWeatherCard.show();
   var city = cityInput.val();
   getCoordinates(city);
 }
@@ -159,4 +161,5 @@ function setForecast(event) {
 // USER INTERACTIONS ==================================================
 
 // INITIALIZATION =====================================================
+currentWeatherCard.hide();
 cityForm.on("submit", setForecast);
