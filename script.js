@@ -3,6 +3,7 @@
 // DEPENDENCIES =======================================================
 var cityInput = $("#city-input");
 var cityForm = $("#city-form");
+var forecastContainer = $("#forecast-container");
 // DATA ===============================================================
 var city = "Denver";
 var apiKey = "791b83e9b2800aa5dfea0d02e03f6cb9";
@@ -47,16 +48,62 @@ function getForecast(lat, lon) {
     })
     .then(function (data) {
       console.log(data);
+
+      forecastContainer.empty();
+
+      var currentDate = data.list[0].dt_txt.split(" ")[0];
+
+      for (var i = 0; i < data.list.length; i++) {
+        var dayData = data.list[i];
+        var date = dayData.dt_txt.split(" ")[0];
+
+        if (date !== currentDate) {
+          var card = createForecastCard(dayData);
+          forecastContainer.append(card);
+
+          currentDate = date;
+        }
+      }
     })
     .catch(function (error) {
       console.log(error);
     });
 }
+function createForecastCard(dayData) {
+  console.log(dayData);
+  // create
+  var card = $("<div>").addClass("card m-3 w-50");
+  var cardBody = $("<div>").addClass("card-body");
+  var date = $("<h5>").addClass("card-title");
+  var icon = $("<img>").addClass("card-img-top");
+  var temp = $("<p>").addClass("card-text");
+  var wind = $("<p>").addClass("card-text");
+  var humidity = $("<p>").addClass("card-text");
+
+  // build
+  date.text(dayData.dt_txt);
+  icon
+    .attr(
+      "src",
+      "http://openweathermap.org/img/w/" + dayData.weather[0].icon + ".png"
+    )
+    .attr("alt", dayData.weather[0].description);
+  temp.text("Temp: " + dayData.main.temp + "°F");
+  wind.text("Wind: " + dayData.wind.speed + " MPH");
+  humidity.text("Humidity: " + dayData.main.humidity + "%");
+
+  // place
+  cardBody.append(date, icon, temp, wind, humidity);
+  card.append(cardBody);
+  return card;
+}
+
 function setForecast(event) {
   event.preventDefault();
   var city = cityInput.val();
   getCoordinates(city);
 }
+
 // USER INTERACTIONS ==================================================
 
 // INITIALIZATION =====================================================
