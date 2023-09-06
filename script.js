@@ -11,8 +11,8 @@ var currentHumidityEl = $("#humidity");
 var currentWindSpeedEl = $("#wind-speed");
 var forecastContainerEl = $("#forecast-container");
 var currentWeatherCard = $("#current-weather-card");
+var recentCitiesEl = $("#city-list");
 // DATA ===============================================================
-var city = "Denver";
 var apiKey = "791b83e9b2800aa5dfea0d02e03f6cb9";
 
 // FUNCTIONS ==========================================================
@@ -117,6 +117,8 @@ function getCurrentWeather(lat, lon) {
       currentTemperatureEl.text("Temperature: " + temperature + "°F");
       currentHumidityEl.text("Humidity: " + humidity + "%");
       currentWindSpeedEl.text("Wind Speed: " + windSpeed + " MPH");
+
+      saveCity(cityName);
     })
     .catch(function (error) {
       console.log(error);
@@ -154,12 +156,47 @@ function createForecastCard(dayData) {
 function setForecast(event) {
   event.preventDefault();
   currentWeatherCard.show();
-  var city = cityInput.val();
+  var city = cityInput.val().trim();
   getCoordinates(city);
 }
 
+// get and set local storage
+function saveCity(city) {
+  var cities = JSON.parse(localStorage.getItem("cities"));
+  if (!cities) {
+    cities = [];
+  }
+  cities.push(city);
+  localStorage.setItem("cities", JSON.stringify(cities));
+}
+function getCity() {
+  var cities = JSON.parse(localStorage.getItem("cities"));
+  if (!cities) {
+    cities = [];
+  }
+  recentCitiesEl.empty();
+
+  for (var i = 0; i < cities.length; i++) {
+    var city = cities[i];
+    addCityBtn(city);
+  }
+}
+function addCityBtn(city) {
+  var cityBtn = $("<button>")
+    .addClass("w-100 my-1 btn btn-secondary btn-block")
+    .text(city);
+
+  cityBtn.on("click", function () {
+    var selectedCity = cityBtn.text();
+    cityInput.val(selectedCity);
+    setForecast(event);
+  });
+
+  recentCitiesEl.append(cityBtn);
+}
 // USER INTERACTIONS ==================================================
 
 // INITIALIZATION =====================================================
 currentWeatherCard.hide();
+getCity();
 cityForm.on("submit", setForecast);
