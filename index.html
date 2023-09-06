@@ -17,25 +17,41 @@
       <div>
         <h1 class="text-center">Weather Dashboard</h1>
       </div>
-      <div class="mx-3 container-3">
-        <div class="row mt-5">
-          <form id="city-form">
-            <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-              <input
-                type="text"
-                class="form-control"
-                placeholder="City"
-                aria-label="City"
-                id="city-input"
-              />
-              <button
-                type="submit"
-                class="w-100 btn btn-primary mt-2 searchBtn"
-              >
-                Search
-              </button>
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+            <h2>Search for a city:</h2>
+            <form id="city-form">
+              <div class="input-group">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="City"
+                  aria-label="City"
+                  id="city-input"
+                />
+                <button
+                  type="submit"
+                  class="w-100 btn btn-primary mt-2 searchBtn"
+                >
+                  Search
+                </button>
+              </div>
+            </form>
+          </div>
+          <div class="col">
+            <div class="card m-3">
+              <div class="card-body">
+                <h3 id="city-name"></h3>
+                <p id="current-date">Date</p>
+                <img id="weather-icon" src="" alt="" />
+                <p id="temperature">86</p>
+                <p id="humidity">44%</p>
+                <p id="wind-speed">3.4 mph</p>
+                <p id="uv-index">15</p>
+              </div>
             </div>
-          </form>
+          </div>
         </div>
       </div>
     </main>
