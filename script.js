@@ -3,7 +3,13 @@
 // DEPENDENCIES =======================================================
 var cityInput = $("#city-input");
 var cityForm = $("#city-form");
-var forecastContainer = $("#forecast-container");
+var cityNameEl = $("#city-name");
+var currentDateEl = $("#current-date");
+var weatherIconEl = $("#weather-icon");
+var currentTemperatureEl = $("#temperature");
+var currentHumidityEl = $("#humidity");
+var currentWindSpeedEl = $("#wind-speed");
+var forecastContainerEl = $("#forecast-container");
 // DATA ===============================================================
 var city = "Denver";
 var apiKey = "791b83e9b2800aa5dfea0d02e03f6cb9";
@@ -27,6 +33,7 @@ function getCoordinates(city) {
       console.log(lat);
       console.log(lon);
       getForecast(lat, lon);
+      getCurrentWeather(lat, lon);
     })
     .catch(function (error) {
       console.log(error);
@@ -49,7 +56,7 @@ function getForecast(lat, lon) {
     .then(function (data) {
       console.log(data);
 
-      forecastContainer.empty();
+      forecastContainerEl.empty();
 
       var currentDate = data.list[0].dt_txt.split(" ")[0];
 
@@ -59,11 +66,56 @@ function getForecast(lat, lon) {
 
         if (date !== currentDate) {
           var card = createForecastCard(dayData);
-          forecastContainer.append(card);
+          forecastContainerEl.append(card);
 
           currentDate = date;
         }
       }
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+}
+function getCurrentWeather(lat, lon) {
+  var currentWeatherUrl =
+    "https://api.openweathermap.org/data/2.5/weather?lat=" +
+    lat +
+    "&lon=" +
+    lon +
+    "&units=imperial" +
+    "&appid=" +
+    apiKey;
+
+  fetch(currentWeatherUrl)
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      console.log(data);
+
+      var cityName = data.name;
+      var currentDate = new Date();
+      var formattedDate =
+        currentDate.getMonth() +
+        1 +
+        "/" +
+        currentDate.getDate() +
+        "/" +
+        currentDate.getFullYear();
+      var weatherIcon = data.weather[0].icon;
+      var temperature = data.main.temp;
+      var humidity = data.main.humidity;
+      var windSpeed = data.wind.speed;
+
+      cityNameEl.text(cityName + " (" + formattedDate + ")");
+      //   currentDateEl.text(currentDate);
+      weatherIconEl.attr(
+        "src",
+        "http://openweathermap.org/img/w/" + weatherIcon + ".png"
+      );
+      currentTemperatureEl.text("Temperature: " + temperature + "°F");
+      currentHumidityEl.text("Humidity: " + humidity + "%");
+      currentWindSpeedEl.text("Wind Speed: " + windSpeed + " MPH");
     })
     .catch(function (error) {
       console.log(error);
